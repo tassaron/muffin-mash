@@ -1,0 +1,16 @@
+{
+    "general": {
+        "title": "Example Site",
+        "theme": "default",
+        "logo": "/img/muffin64.png",
+        "logo-alt": "muffin wearing a crown",
+        "footer": "<a href=\"https://tassaron.com\">made by brianna</a>",
+        "favicon": "/img/muffin.svg"
+    },
+    "folders": {
+        "Session Recaps": {
+            "sort-mode": "final_number",
+            "embeddable": true
+        }
+    }
+}

@@ -1,0 +1,48 @@
+<style>
+    #game {
+    margin: auto;
+    width: 720px;
+    height: 640px;
+    position: relative;
+    display: block;
+    border: 2px solid black;
+  }
+
+#ui-layer { z-index: 3; position: absolute; top: 0px; left: 0px;}
+#slow-layer { z-index: 2; position: absolute; top: 0px; left: 0px;}
+#game-layer { z-index: 1; position: absolute; top: 0px; left: 0px;}
+
+#swap_button {
+  background-color: black;
+  color: white;
+  height: 8em;
+  width: 640px;
+  border-radius: 10px;
+  padding: 1em;
+  margin: auto auto 0.5em auto;
+  font-size: x-large;
+  font-weight: 2;
+  text-align: center;
+}
+
+#help_text {
+  padding-bottom: 0.5em;
+  margin: 0 auto;
+}
+
+</style>        
+<script type="module" src="../js/jezzball-v1.js"></script>
+<div id="help_text">Fill the level with walls! Tap to place a wall.<br>Tap the box underneath, or right-click,
+    to swap direction.</div>
+<div id="game"></div>
+<div id="game_controls">
+    <div id="swap_button">↻ Swap Direction By Tapping This Box</div>
+        <small>
+            made by <a href="https://tassaron.com">tassaron<img src="../img/muffin64.png"
+                alt="muffin wearing crown icon"></a>
+                <br>
+                <a href="https://github.com/tassaron/jezzball-transgender">source code on github</a>
+            </small>
+        </div>
+    <div id="pause_button">&#9612;&#9612; PAUSE GAME</div>
+</div>
