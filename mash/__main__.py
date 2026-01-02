@@ -19,7 +19,16 @@ import shutil
 import argparse
 from pprint import pprint
 from mistune import create_markdown
+import importlib
 import json
+
+
+def get_theme_path(theme_name: str):
+    try:
+        theme_module = importlib.import_module(f"mash.themes.{theme_name}")
+    except ImportError:
+        return
+    return theme_module.__path__[0]
 
 
 def supported_ext(ext: str):
@@ -270,7 +279,7 @@ def work(config, infile, outfile):
     add_folder_config_defaults(config, toc)
     toc = sort_toc(config, toc)
     print("\033[92mmuffin-mash created this table of contents:\033[0m")
-    pprint(toc)
+    pprint(toc, indent=4)
 
     # create HTML files!!
     convert_markdown_to_html = create_page_converter(config, toc)
@@ -340,12 +349,13 @@ def main(argv=None):
             print("Target already exists. Re-run with --clean to overwrite")
             return 1
         shutil.rmtree(outfile)
-    if not os.path.exists(outfile):
-        shutil.copytree(
-            f"{os.path.join("themes", config['general']['theme'])}", f"{outfile}"
-        )
-        shutil.copy(f"{infile}/robots.txt", f"{outfile}/robots.txt")
-        shutil.copytree(f"{infile}/img", f"{outfile}/img")
-        shutil.copytree(f"{infile}/js", f"{outfile}/js")
+    theme_path = get_theme_path(config["general"]["theme"])
+    if theme_path is None:
+        print("Invalid theme name")
+        return 1
+    shutil.copytree(theme_path, outfile)
+    shutil.copy(f"{infile}/robots.txt", f"{outfile}/robots.txt")
+    shutil.copytree(f"{infile}/img", f"{outfile}/img")
+    shutil.copytree(f"{infile}/js", f"{outfile}/js")
     work(config, infile, outfile)
     return 0
