@@ -86,7 +86,7 @@ header > a {
 /* grid */
 header {
     grid-area: header;
-    padding: 20px;
+    padding: 1.2rem;
     font-size: xx-large;
 }
 
@@ -100,16 +100,18 @@ aside {
 
 footer {
     grid-area: footer;
+    margin: auto;
+    text-align: center;
 }
 
 .wrapper {
     display: grid;
-    grid-gap: 20px;
+    grid-gap: 1.2rem;
     grid-template-columns: 1fr 5fr;
     grid-template-areas: 
         "header header"
         "sidebar content"
-        "footer content";
+        "footer footer";
 }
 
 @media (max-width: 500px) {
