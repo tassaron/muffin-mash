@@ -57,8 +57,8 @@ def create_page_converter(config, toc):
     <div class="wrapper">
     
     <header>
-    <a href="/index.html">
-    {"" if config['general']['logo'] is None else f"<img src='{config["general"]["logo"]}' alt='{config['general']['logo-alt']}'>"}
+    <a href="/{'' if config['general']['pretty-urls'] else 'index.html'}">
+    {"" if config['general']['logo'] is None else f"<img src='{config["general"]["logo"]}' style='{config['general']['logo-style']}' alt='{config['general']['logo-alt']}'>"}
     {config['general']['title']}
     </a>
     </header>
@@ -69,8 +69,6 @@ def create_page_converter(config, toc):
     </body>
     </html>
     """
-
-    # content_start = """<div id='content'>"""
     content_start = """<article><div id='content'>"""
     content_end = """</div></article>"""
     nav_start = """<aside>"""
@@ -84,21 +82,17 @@ def create_page_converter(config, toc):
 
     def create_url(dir, title):
         sep = "/" if dir != "" else ""
-        return f"/{encode_string(dir)}{sep}{encode_string(title)}.html"
+        return f"/{encode_string(dir)}{sep}{'' if config['general']['pretty-urls'] and title=="index" else encode_string(title)}{'' if config["general"]["pretty-urls"] else '.html'}"
 
     def create_html_table_of_contents(dir, include_index=True):
         create_url_ = (
-            lambda filename: f"<li><a href='{create_url(dir, filename)}'>{get_route_name_(f'{dir}/{filename}')}"
+            lambda filename: f"<li><a href='{create_url(dir, filename)}'>{get_route_name_(f'{dir}/{filename}')}</a></li>"
         )
         li = []
         if include_index and "index" in toc[dir]:
             li.append(create_url_("index"))
         li.extend(
-            [
-                f"{create_url_(filename)}</a></li>"
-                for filename in toc[dir]
-                if filename != "index"
-            ]
+            [create_url_(filename) for filename in toc[dir] if filename != "index"]
         )
         return "".join(li)
 
@@ -148,7 +142,8 @@ def create_page_converter(config, toc):
                         else config["general"]["route-names"][dir]
                     )
             contents = (
-                f"[< click to go back]({baseurl}/index.html)\n# {h1}\n" + contents
+                f"[< click to go back]({baseurl}/{'' if config['general']['pretty-urls'] else 'index.html'})\n# {h1}\n"
+                + contents
             )
         contents = replace_local_links(dir, contents)
         contents = [
@@ -176,9 +171,11 @@ def load_config_file(path=None):
             "theme": "default",
             "logo": None,
             "logo-alt": None,
+            "logo-style": "width: 64px; height: 64px",
             "footer": "this is the footer text",
             "favicon": None,
             "route-names": {},
+            "pretty-urls": False,
         },
         "folders": {},
     }

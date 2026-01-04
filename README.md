@@ -57,12 +57,28 @@ Note: this requires a config file to make the contents of `otherjunk` "embeddabl
 - table of contents for `index.md` in root directory will be used for site-wide navigation
 - (optional) `config.json` in root directory
 
-### changes to standard markdown
+### note formatting language
 
-You can link locally between pages using `[[` and `]]`. You can also use a pipe character `|` to change the displayed link text.
+You can mix markdown and HTML in your notes (you may need a blank line between HTML block elements and markdown content for proper detection).
 
-- [[example]] links to a page called "example" in the same folder and looks like "[example](https://example.com)"
-- [[test|example]] does the same, but the link text looks like "[test](https://example.com)"
+The markdown syntax is ""standard"" except for this one modification:
+
+- You can link locally between pages using `[[` and `]]`. You can also use a pipe character `|` to change the displayed link text.
+    - [[example]] links to a page called "example" in the same folder and looks like "[example](https://example.com)"
+    - [[test|example]] does the same, but the link text looks like "[test](https://example.com)"
+
+### removing .html from final URLs
+
+The `pretty-urls` general config option tells muffin-mash not to include .html at the end of links. This requires you to configure your webserver to server the files despite the lack of file extension. For example, see [this snippet from StackOverflow](https://stackoverflow.com/a/38238001) (copy-pasted below):
+
+```nginx
+location / {
+    if ($request_uri ~ ^/(.*)\.html(\?|$)) {
+        return 302 /$1;
+    }
+    try_files $uri $uri.html $uri/ =404;
+}
+```
 
 ## development
 
