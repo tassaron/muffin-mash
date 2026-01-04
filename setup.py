@@ -13,8 +13,9 @@ except Exception:
 setup(
     name="mash",
     author="tassaron",
-    version="2025.12.31",
+    version="2026.01.03",
     packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         "mistune",
     ],

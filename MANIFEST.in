@@ -1,0 +1,3 @@
+graft mash/themes
+
+global-exclude *.pyc
