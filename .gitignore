@@ -5,3 +5,4 @@ env/
 *.py[cod]
 __pycache__/
 *.egg-info
+node_modules/

@@ -21,9 +21,12 @@ from pprint import pprint
 from mistune import create_markdown
 import importlib
 import json
+from .__init__ import __version__
 
 
 def get_theme_path(theme_name: str):
+    if theme_name == "default":
+        theme_name = "brianna"
     try:
         theme_module = importlib.import_module(f"mash.themes.{theme_name}")
     except ImportError:
@@ -58,8 +61,8 @@ def create_page_converter(config, toc):
     
     <header>
     <a href="/{'' if config['general']['pretty-urls'] else 'index.html'}">
-    {"" if config['general']['logo'] is None else f"<img src='{config["general"]["logo"]}' style='{config['general']['logo-style']}' alt='{config['general']['logo-alt']}'>"}
-    {config['general']['title']}
+    {'' if config['general']['logo'] is None else f'<img src="{config['general']['logo']}" style="{config['general']['logo-style']}" alt="{config['general']['logo-alt']}">'}
+    <span id="header-title">{config['general']['title']}</span>
     </a>
     </header>
     """
@@ -73,7 +76,7 @@ def create_page_converter(config, toc):
     content_end = """</div></article>"""
     nav_start = """<aside>"""
     nav_end = """</aside>"""
-    get_route_name_ = lambda route: get_route_name(config, route)
+    get_route_name_ = lambda route: get_route_name(config, route).replace(" ", "&nbsp;")
 
     def encode_string(title):
         title = title.replace(" ", "%20")
@@ -323,6 +326,9 @@ def main(argv=None):
             action="store_true",
             help="delete target location before creating files",
             default=False,
+        )
+        parser.add_argument(
+            "--version", "-v", action="version", version=f"%(prog)s {__version__}"
         )
         return parser.parse_args(argv)
 

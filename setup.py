@@ -1,19 +1,19 @@
 from setuptools import setup, find_packages
 from os import path
+from mash import __version__
 
 
 try:
-    with open(
-        path.join(path.abspath(path.dirname(__file__)), "README.md"), encoding="utf-8"
-    ) as f:
+    this_location = path.abspath(path.dirname(__file__))
+    with open(path.join(this_location, "README.md"), encoding="utf-8") as f:
         long_description = f.read()
 except Exception:
     raise FileNotFoundError("The file `README.md` could not be found or accessed")
 
 setup(
     name="mash",
-    author="tassaron",
-    version="2026.01.03",
+    author="Brianna Rainey <tassaron.com>",
+    version=__version__,
     packages=find_packages(),
     include_package_data=True,
     install_requires=[

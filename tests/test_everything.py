@@ -1,5 +1,5 @@
 import pytest
-from mash import *
+from mash.__main__ import *
 
 
 @pytest.fixture
@@ -53,6 +53,16 @@ def test_find_markdown(markdown):
             ".txt",
         ),
         (
+            "Games",
+            "Jezzball",
+            ".html",
+        ),
+        (
+            "Games",
+            "index",
+            ".md",
+        ),
+        (
             "Session Recaps",
             "Session 0",
             ".md",
@@ -80,13 +90,18 @@ def test_find_markdown(markdown):
         (
             "img",
             "muffin",
-            ".png",
+            ".svg",
+        ),
+        (
+            "js",
+            "jezzball-v1",
+            ".js",
         ),
     ]
 
 
-def test_create_tables_of_contents(markdown):
-    assert create_tables_of_contents(markdown) == {
+def test_create_tables_of_contents(config, markdown):
+    assert create_tables_of_contents(config, markdown) == {
         "": ["Example Page"],
         "Session Recaps": [
             "Session 0",
@@ -94,5 +109,8 @@ def test_create_tables_of_contents(markdown):
             "Session 10",
             "Session 11",
             "Session 2",
+        ],
+        "Games": [
+            "Jezzball",
         ],
     }
