@@ -22,7 +22,7 @@ body {
     background: none;
 }
 
-code {
+code, pre {
     font-family: "Atkinson Hyperlegible Mono", monospace;
 }
 
@@ -78,15 +78,28 @@ a:focus {
     border-color: lightpink;
 }
 
+header > a > img {
+    margin-right: 1rem;
+}
+
 header > a {
     text-decoration: none !important;
     color: white !important;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#header-title {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
 }
 
 /* grid */
 header {
     grid-area: header;
-    padding: 1.2rem;
+    padding: 1.2rem 1.2rem 0;
     font-size: xx-large;
 }
 
@@ -111,7 +124,7 @@ footer {
     grid-template-areas: 
         "header header"
         "sidebar content"
-        "footer footer";
+        "sidebar footer";
 }
 
 @media (max-width: 500px) {
