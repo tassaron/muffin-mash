@@ -45,11 +45,11 @@ ul li::before {
     content: '• ';
 }
 
-aside > ul > li::before {
+nav > ul > li::before {
     content: '';
 }
 
-aside > ul {
+nav > ul {
     margin-left: 0.5rem;
     background-color: rgba(138,0,100,0.1);
     width:fit-content;
@@ -114,8 +114,8 @@ article {
     grid-area: content;
 }
 
-aside {
-    grid-area: sidebar;
+nav {
+    grid-area: nav;
 }
 
 footer {
@@ -130,8 +130,8 @@ footer {
     grid-template-columns: 1fr 5fr;
     grid-template-areas: 
         "header header"
-        "sidebar content"
-        "sidebar footer";
+        "nav content"
+        "nav footer";
 }
 
 @media (max-width: 500px) {
@@ -139,7 +139,7 @@ footer {
         grid-template-columns: 6fr;
         grid-template-areas:
             "header"
-            "sidebar"
+            "nav"
             "content"
             "footer";
     }

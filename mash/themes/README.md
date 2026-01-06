@@ -1,15 +1,19 @@
-# Themes for muffin-mash
+# themes for muffin-mash
 
-A theme is a directory whose contents gets copied into the output directory as the first step when building a website. It can contain any number of font files or images as needed by the theme, but certain things are mandatory to integrate with the core of muffin-mash
+A theme is a directory of CSS, image, and font files that gets copied into the output directory when building a website. See [`brianna/style.css`](/brianna/style.css) for an example.
 
-## Mandatory files
+## page layout
 
-```
-style.css
-```
+Every page has these elements, nested as shown below:
 
-### style.css
+- .wrapper
+    - header
+    - nav
+    - article
+        - #content
+    - footer
 
-List of CSS IDs used:
+## legal
 
-- content
+- fonts licensed under [OFL](https://openfontlicense.org/ofl-faq/)
+- everything else uses the [same license as the parent package](/LICENSE)
