@@ -108,7 +108,7 @@ def create_page_converter(config, toc):
                 li.append(create_html_table_of_contents(dirname))
             else:
                 li.append(
-                    f"<li><a href='/{encode_string(dirname)}/index.html'>{get_route_name_(dirname)}</a></li>"
+                    f"<li><a href='/{encode_string(dirname)}/{'' if config['general']['pretty-urls'] else 'index.html'}'>{get_route_name_(dirname)}</a></li>"
                 )
                 if dirname == current_dir:
                     sub_toc = create_html_table_of_contents(dirname)
@@ -177,8 +177,9 @@ def load_config_file(path=None):
             "logo-style": "width: 64px; height: 64px",
             "footer": "this is the footer text",
             "favicon": None,
-            "route-names": {},
             "pretty-urls": False,
+            "route-names": {},
+            "include-dirs": [],
         },
         "folders": {},
     }
@@ -220,7 +221,7 @@ def create_tables_of_contents(config, working_files):
         if filename == "index" and (
             dir == ""
             or dir not in config["folders"]
-            or not config["folders"][dir]["embeddable"]
+            or not config["folders"][dir].get("embeddable")
         ):
             continue
         toc[dir].append(filename)
@@ -334,7 +335,7 @@ def main(argv=None):
 
     args = parse_args(argv)
 
-    # use parsed args
+    # do error checking before touching any files
     infile = os.path.realpath(args.input)
     outfile = os.path.realpath(args.output)
     config_path = (
@@ -347,18 +348,36 @@ def main(argv=None):
         return 1
 
     config = load_config_file(config_path)
+
+    for include_dir in config["general"]["include-dirs"]:
+        included_dir = f"{infile}/{include_dir}"
+        if not os.path.exists(included_dir):
+            print(f"`include-dirs` contains `{included_dir}`, which does not exist")
+            return 1
+    theme_path = get_theme_path(config["general"]["theme"])
+    if theme_path is None:
+        print("Invalid theme name")
+        return 1
+
+    # finished error checking!
+
+    # DESTRUCTION (cleaning destination)
     if os.path.exists(outfile):
         if not args.clean:
             print("Target already exists. Re-run with --clean to overwrite")
             return 1
         shutil.rmtree(outfile)
-    theme_path = get_theme_path(config["general"]["theme"])
-    if theme_path is None:
-        print("Invalid theme name")
-        return 1
-    shutil.copytree(theme_path, outfile)
+
+    # CONSTRUCTION (copying directories)
+    os.makedirs(outfile)
+    shutil.copytree(theme_path, f"{outfile}/theme")
+    shutil.copy(f"{outfile}/theme/style.css", f"{outfile}/style.css")
     shutil.copy(f"{infile}/robots.txt", f"{outfile}/robots.txt")
     shutil.copytree(f"{infile}/img", f"{outfile}/img")
     shutil.copytree(f"{infile}/js", f"{outfile}/js")
+    for include_dir in config["general"]["include-dirs"]:
+        shutil.copytree(f"{infile}/{include_dir}", f"{outfile}/{include_dir}")
+
+    # Now convert the markdown files!
     work(config, infile, outfile)
     return 0

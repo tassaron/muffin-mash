@@ -1,16 +1,16 @@
 @font-face {
     font-family: "Atkinson HyperLegible Next";
-    src: url(AtkinsonHyperlegibleNext-VariableFont_wght.ttf);
+    src: url("/theme/AtkinsonHyperlegibleNext-VariableFont_wght.ttf");
 }
 
 @font-face {
     font-family: "Atkinson HyperLegible Mono";
-    src: url(AtkinsonHyperlegibleMono-VariableFont_wght.ttf);
+    src: url("/theme/AtkinsonHyperlegibleMono-VariableFont_wght.ttf");
 }
 
 html {
     background-color: #302734;
-    background-image: url("bg.png");
+    background-image: url("/theme/bg.png");
     background-repeat: repeat-y;
     font-family: "Atkinson Hyperlegible Next", sans-serif;
     font-weight: 400;
@@ -38,11 +38,11 @@ ul {
 
 ul li {
     list-style-type: none;
+    width: 125%;
 }
 
 ul li::before {
     content: '• ';
-    padding: 0;
 }
 
 aside > ul > li::before {
@@ -82,6 +82,12 @@ header > a > img {
     margin-right: 1rem;
 }
 
+@media (max-width: 500px) {
+    header > a > img {
+        margin-right: 0;
+    }
+}
+
 header > a {
     text-decoration: none !important;
     color: white !important;
@@ -101,6 +107,7 @@ header {
     grid-area: header;
     padding: 1.2rem 1.2rem 0;
     font-size: xx-large;
+    width: 100%;
 }
 
 article {
