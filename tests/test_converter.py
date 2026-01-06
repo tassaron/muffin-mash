@@ -14,4 +14,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-__version__ = "2026.01.06"
+import pytest
+from mash.converter import create_page_converter
+from mash.util import default_config, create_tables_of_contents
+
+
+@pytest.fixture
+def converter():
+    yield create_page_converter(
+        default_config,
+        create_tables_of_contents(default_config, [("", "index", ".md")]),
+    )
+
+
+def test_converter_adds_page_title(converter):
+    title = default_config["general"]["title"]
+    converted = converter("index", "", ".md", "")
+    gayi = converted.index(title)
+    assert (
+        converted[gayi - 7 : gayi + len(title) + 8]
+        == f"<title>{default_config["general"]["title"]}</title>"
+    )
