@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import shutil
 from pprint import pprint
+from .__init__ import __version__, __package__
 from .converter import create_page_converter
 from .util import (
     find_markdown,
@@ -27,13 +28,17 @@ from .util import (
 )
 
 
+def print_work_report(toc):
+    print(f"\033[92m{__package__} {__version__} created this table of contents:\033[0m")
+    pprint(toc, indent=4)
+
+
 def work(config, infile, outfile):
     working_files = find_markdown(infile)
     toc = create_tables_of_contents(config, working_files)
     add_folder_config_defaults(config, toc)
     toc = sort_toc(config, toc)
-    print("\033[92mmuffin-mash created this table of contents:\033[0m")
-    pprint(toc, indent=4)
+    print_work_report(toc)
 
     # create HTML files!!
     convert_markdown_to_html = create_page_converter(config, toc)

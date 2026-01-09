@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 from os import path
-from mash import __version__
+from mash import __version__, __package__
 
 
 try:
@@ -11,7 +11,7 @@ except Exception:
     raise FileNotFoundError("The file `README.md` could not be found or accessed")
 
 setup(
-    name="mash",
+    name="muffin-mash" if __package__ is None else __package__,
     author="Brianna Rainey <tassaron.com>",
     version=__version__,
     packages=find_packages(),

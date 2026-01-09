@@ -69,7 +69,7 @@ The markdown syntax is ""standard"" except for this one modification:
 
 ### removing .html from final URLs
 
-The `pretty-urls` general config option tells muffin-mash not to include .html at the end of links. This requires you to configure your webserver to server the files despite the lack of file extension. For example, see [this snippet from StackOverflow](https://stackoverflow.com/a/38238001) (copy-pasted below):
+The `pretty-urls` general config option tells muffin-mash not to include .html at the end of links. This requires you to configure your webserver to serve the files despite the lack of file extension. For example, see [this nginx snippet from StackOverflow](https://stackoverflow.com/a/38238001) (copy-pasted below):
 
 ```nginx
 location / {
@@ -86,6 +86,7 @@ location / {
 
 ### todo
 
+- properly ignore dotfiles and double-nested directories
 - nested folder support
 - jinja templating would be nice
 - better themes/theme integration (jinja would help with this)

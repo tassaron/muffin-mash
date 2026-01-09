@@ -14,4 +14,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-__version__ = "2026.01.06"
+# convention
+__version__ = "2026.01.08"
+
+
+# https://peps.python.org/pep-0366/
+__package__ = "mash"

@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import shutil
 import argparse
-from .__init__ import __version__
+from .__init__ import __version__, __package__
 from .worker import work
 from .util import (
     get_theme_path,
@@ -27,7 +27,9 @@ from .util import (
 
 def main(argv=None):
     def parse_args(argv):
-        parser = argparse.ArgumentParser(description="convert markdown files into html")
+        parser = argparse.ArgumentParser(
+            prog=__package__, description="convert markdown files into html"
+        )
         parser.add_argument(
             "--input", "-i", help="path to input (notes) directory", required=True
         )
@@ -73,6 +75,13 @@ def main(argv=None):
         return 1
 
     # finished error checking!
+    # beyond here we always return 0
+
+    expected_file = {
+        "robots.txt": f"{infile}/robots.txt",
+        "/img": f"{infile}/img",
+        "/js": f"{infile}/js",
+    }
 
     # DESTRUCTION (cleaning destination)
     if os.path.exists(outfile):
@@ -83,11 +92,23 @@ def main(argv=None):
 
     # CONSTRUCTION (copying directories)
     os.makedirs(outfile)
+    # move theme
     shutil.copytree(theme_path, f"{outfile}/theme")
     shutil.move(f"{outfile}/theme/style.css", f"{outfile}/style.css")
-    shutil.copy(f"{infile}/robots.txt", f"{outfile}/robots.txt")
-    shutil.copytree(f"{infile}/img", f"{outfile}/img")
-    shutil.copytree(f"{infile}/js", f"{outfile}/js")
+    # move robots.txt
+    if os.path.exists(expected_file["robots.txt"]):
+        shutil.copy(expected_file["robots.txt"], f"{outfile}/robots.txt")
+    else:
+        print(
+            f"\033[93mMissing `robots.txt` in {infile}; generating strict default\033[0m"
+        )
+        with open(f"{outfile}/robots.txt", "w") as fp:
+            fp.writelines(["User-agent: *\n", "Disallow: /\n"])
+    # optional directories
+    if os.path.exists(expected_file["/img"]):
+        shutil.copytree(expected_file["/img"], f"{outfile}/img")
+    if os.path.exists(expected_file["/js"]):
+        shutil.copytree(expected_file["/js"], f"{outfile}/js")
     for include_dir in config["general"]["include-dirs"]:
         shutil.copytree(f"{infile}/{include_dir}", f"{outfile}/{include_dir}")
 
