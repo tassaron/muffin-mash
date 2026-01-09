@@ -71,7 +71,9 @@ def add_folder_config_defaults(config, toc):
     """idempotent function called immediately after discovering the folder structure to fix the config"""
     default_folder_config = {
         "sort-mode": "default",
+        "sort-reverse": False,
         "embeddable": False,
+        "nav-limit": -1,
     }
     for folder in toc:
         if folder not in config["folders"]:
@@ -142,4 +144,6 @@ def sort_toc(config, toc):
         toc[folder] = SortFunction.__dict__[config["folders"][folder]["sort-mode"]](
             toc[folder]
         )
+        if config["folders"][folder]["sort-reverse"]:
+            toc[folder].reverse()
     return toc

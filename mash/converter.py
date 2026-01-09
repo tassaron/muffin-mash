@@ -23,7 +23,7 @@ def create_page_converter(config, toc):
         escape=False, renderer="html", plugins=["strikethrough"]
     )
 
-    header = f"""<!doctype html><html>
+    header = f"""<!doctype html><html lang="en">
     <head><title>{config['general']['title']}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -41,7 +41,7 @@ def create_page_converter(config, toc):
     </header>
     """
 
-    footer = f"""<footer>{config["general"]["footer"]}<footer>
+    footer = f"""<footer>{config["general"]["footer"]}</footer>
     </div>
     </body>
     </html>
@@ -61,7 +61,9 @@ def create_page_converter(config, toc):
         sep = "/" if dir != "" else ""
         return f"/{encode_string(dir)}{sep}{'' if config['general']['pretty-urls'] and title=="index" else encode_string(title)}{'' if config["general"]["pretty-urls"] else '.html'}"
 
-    def create_html_table_of_contents(dir, include_index=True):
+    def create_html_table_of_contents(dir, include_index=True, limit=None):
+        if limit is not None and limit < 1:
+            raise NotImplementedError("limit must be positive integer")
         create_url_ = (
             lambda filename: f"<li><a href='{create_url(dir, filename)}'>{get_route_name_(f'{dir}/{filename}')}</a></li>"
         )
@@ -71,6 +73,8 @@ def create_page_converter(config, toc):
         li.extend(
             [create_url_(filename) for filename in toc[dir] if filename != "index"]
         )
+        if limit:
+            li = li[:limit]
         return "".join(li)
 
     def add_links_to_folders(current_dir: str):
@@ -78,8 +82,20 @@ def create_page_converter(config, toc):
         for dirname in toc.keys():
             if dirname == "":
                 continue
-            if config["folders"][dirname]["embeddable"]:
-                li.append(create_html_table_of_contents(dirname))
+            if (
+                config["folders"][dirname]["embeddable"]
+                and config["folders"][dirname]["nav-limit"] != 0
+            ):
+                if config["folders"][dirname]["nav-limit"] == -1:
+                    li.append(create_html_table_of_contents(dirname))
+                else:
+                    li.append(
+                        create_html_table_of_contents(
+                            dirname,
+                            include_index=True,
+                            limit=config["folders"][dirname]["nav-limit"],
+                        )
+                    )
             else:
                 li.append(
                     f"<li><a href='/{encode_string(dirname)}/{'' if config['general']['pretty-urls'] else 'index.html'}'>{get_route_name_(dirname)}</a></li>"
