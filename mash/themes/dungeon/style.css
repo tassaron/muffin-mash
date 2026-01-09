@@ -1,18 +1,14 @@
 @font-face {
-    font-family: "Atkinson HyperLegible Next";
-    src: url("/theme/AtkinsonHyperlegibleNext-VariableFont_wght.ttf");
-}
-
-@font-face {
-    font-family: "Atkinson HyperLegible Mono";
-    src: url("/theme/AtkinsonHyperlegibleMono-VariableFont_wght.ttf");
+    font-family: "Merriweather Sans";
+    src: url("/theme/MerriweatherSans-VariableFont_wght.ttf");
 }
 
 html {
     background-color: #302734;
-    background-image: url("/theme/bg.png");
-    background-repeat: repeat-y;
-    font-family: "Atkinson Hyperlegible Next", sans-serif;
+    /*background-image: url("/theme/drakkenheim-overview.webp");*/
+    background-image: url("/theme/bg.jpg");
+    background-repeat: no-repeat;
+    font-family: "Merriweather Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
     color: white;
@@ -23,9 +19,7 @@ body {
 }
 
 code, pre {
-    font-family: "Atkinson Hyperlegible Mono", monospace;
-    display: contents;
-    word-break: break-all;
+    font-family: monospace;
 }
 
 h2, h3 {
@@ -52,8 +46,8 @@ nav > ul > li::before {
 
 nav > ul {
     margin-left: 0.5rem;
-    background-color: rgba(138,0,100,0.1);
-    width:fit-content;
+    background-color: rgba(15, 2, 19, 0.90);
+    width: max-content;
     padding: 1rem 2rem 1rem 0.5rem !important;
 }
 
@@ -84,6 +78,10 @@ a:focus {
     border-color: lightpink;
 }
 
+nav a, nav a:visited {
+    color: white !important;
+}
+
 header > a > img {
     margin-right: 1rem;
 }
@@ -96,7 +94,7 @@ header > a > img {
 
 header > a {
     text-decoration: none !important;
-    color: white !important;
+    color: black !important;
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -106,6 +104,7 @@ header > a {
     display: inline-block;
     vertical-align: middle;
     height: 100%;
+    overflow-x: hidden;
 }
 
 /* grid */
@@ -113,11 +112,19 @@ header {
     grid-area: header;
     padding: 1.2rem 1.2rem 0;
     font-size: xx-large;
-    width:100%;
 }
 
 article {
     grid-area: content;
+    background-color: rgba(15, 2, 19, 0.69);
+    padding: 1rem;
+    margin-right: 2rem;
+}
+
+@media (max-width:500px) {
+    article {
+        margin-right: 0rem;
+    }
 }
 
 nav {
@@ -131,7 +138,6 @@ footer {
 }
 
 .wrapper {
-    width: 100%;
     display: grid;
     grid-gap: 1.2rem;
     grid-template-columns: 1fr 5fr;
@@ -139,6 +145,8 @@ footer {
         "header header"
         "nav content"
         "nav footer";
+    width: 100%;
+    overflow-x: hidden;
 }
 
 @media (max-width: 500px) {
