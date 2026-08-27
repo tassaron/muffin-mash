@@ -16,6 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import shutil
+import tarfile
 from pprint import pprint
 from .__init__ import __version__, __package__
 from .converter import create_page_converter
@@ -28,12 +29,22 @@ from .util import (
 )
 
 
+def decompress_skel(outfile):
+    for dir, _, files in os.walk(outfile):
+        for name in [filename for filename in files if filename.endswith(".tar.gz")]:
+            full_path = os.path.join(dir, name)
+            with tarfile.open(full_path) as t:
+                t.extractall(dir)
+            os.remove(full_path)
+
+
 def print_work_report(toc):
     print(f"\033[92m{__package__} {__version__} created this table of contents:\033[0m")
     pprint(toc, indent=4)
 
 
 def work(config, infile, outfile):
+    decompress_skel(outfile)
     working_files = find_markdown(infile)
     toc = create_tables_of_contents(config, working_files)
     add_folder_config_defaults(config, toc)
@@ -50,16 +61,17 @@ def work(config, infile, outfile):
         outdir = os.path.join(outfile, dir)
         if not os.path.exists(outdir):
             os.makedirs(outdir)
+        full_path = f"{os.path.join(infile, dir, filename)}{ext}"
 
         if ext == "html":
             shutil.copy(
-                f"{os.path.join(infile, dir, filename)}{ext}",
+                full_path,
                 f"{os.path.join(outdir, filename)}.html",
             )
             continue
 
         # read markdown into a string
-        with open(f"{os.path.join(infile, dir, filename)}{ext}", "r") as f:
+        with open(full_path, "r") as f:
             contents = "".join(f.readlines())
 
         # convert markdown to html

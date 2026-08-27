@@ -44,7 +44,7 @@ def main(argv=None):
             default=False,
         )
         parser.add_argument(
-            "--version", "-v", action="version", version=f"%(prog)s {__version__}"
+            "--version", "-V", action="version", version=f"%(prog)s {__version__}"
         )
         return parser.parse_args(argv)
 
@@ -81,6 +81,7 @@ def main(argv=None):
         "robots.txt": f"{infile}/robots.txt",
         "/img": f"{infile}/img",
         "/js": f"{infile}/js",
+        "/skel": f"{infile}/skel",
     }
 
     # DESTRUCTION (cleaning destination)
@@ -91,7 +92,10 @@ def main(argv=None):
         shutil.rmtree(outfile)
 
     # CONSTRUCTION (copying directories)
-    os.makedirs(outfile)
+    if os.path.exists(expected_file["/skel"]):
+        shutil.copytree(expected_file["/skel"], outfile)
+    else:
+        os.makedirs(outfile)
     # move theme
     shutil.copytree(theme_path, f"{outfile}/theme")
     shutil.move(f"{outfile}/theme/style.css", f"{outfile}/style.css")

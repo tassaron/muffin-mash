@@ -15,7 +15,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # convention
-__version__ = "2026.01.08"
+__version__ = "2026.08.27"
 
 
 # https://peps.python.org/pep-0366/

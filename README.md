@@ -55,7 +55,9 @@ Note: this requires a config file to make the contents of `otherjunk` "embeddabl
 - create `index.md` files in directories you want to be browsable
     - these files will have a **table of contents** appended
 - table of contents for `index.md` in root directory will be used for site-wide navigation
-- (optional) `config.json` in root directory
+- `.md` files get converted to `.html` files, and all `.html` files will have the site header/footer added (including files that were already `.html` before the conversion process)
+- (optional) place `config.json` in root (notes) directory for more options
+- (optional) a `/skel` folder in notes will be copied into the output directory before generating HTML, with tar.gz files decompressed in-place. I use this to bundle my Godot games (as they are mostly WASM) but it can be used for any files that don't need to care about the site theme or table of contents
 
 ### note formatting language
 

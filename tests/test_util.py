@@ -104,6 +104,11 @@ def test_find_markdown(markdown):
             ".md",
         ),
         (
+            "Test Page",
+            "index.tar",
+            ".gz",
+        ),
+        (
             "img",
             "muffin",
             ".svg",
